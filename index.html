@@ -5,51 +5,331 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SCL-90 症状自评量表</title>
 <style>
+/* ===== Reset & Base ===== */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
-.container { max-width: 720px; margin: 0 auto; padding: 16px; }
-.header { text-align: center; padding: 24px 0 8px; }
-.header h1 { font-size: 22px; font-weight: 700; color: #1a1a1a; }
-.header p { font-size: 13px; color: #888; margin-top: 4px; }
-.card { background: #fff; border-radius: 14px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-.card h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #1a1a1a; }
-.btn { display: inline-block; padding: 10px 28px; border: none; border-radius: 22px; font-size: 15px; cursor: pointer; transition: background 0.2s; }
-.btn-primary { background: #1a1a1a; color: #fff; }
-.btn-primary:hover { background: #333; }
-.btn-primary:active { background: #000; }
-.btn-outline { background: #fff; color: #1a1a1a; border: 1.5px solid #ccc; }
-.btn-outline:hover { background: #f0f0f0; }
-.btn-outline:active { background: #e0e0e0; }
-.btn:disabled { background: #ccc; color: #999; cursor: not-allowed; border-color: #ccc; }
-.progress-wrap { margin-bottom: 16px; }
-.progress-bar { width: 100%; height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden; margin-bottom: 4px; }
-.progress-fill { height: 100%; background: #1a1a1a; border-radius: 3px; transition: width 0.3s; }
-.progress-text { font-size: 12px; color: #999; text-align: right; }
-.question-item { margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f3f3f3;
+  color: #3a3a3a;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Container ===== */
+.container {
+  max-width: 750px;
+  margin: 0 auto;
+  padding: 24px 18px 12px;
+}
+
+/* ===== Header ===== */
+.header {
+  text-align: center;
+  padding: 36px 0 28px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #e2e2e2;
+}
+.header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #222;
+  letter-spacing: 1px;
+}
+.header p {
+  font-size: 13px;
+  color: #999;
+  margin-top: 8px;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Card ===== */
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 28px 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.04);
+}
+.card h2 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1a1a1a;
+  letter-spacing: 0.3px;
+}
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-block;
+  padding: 11px 32px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.4px;
+  outline: none;
+}
+.btn-primary {
+  background: #222;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+.btn-primary:hover {
+  background: #3a3a3a;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  background: #000;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  transform: translateY(0);
+}
+.btn-outline {
+  background: #fff;
+  color: #333;
+  border: 1.5px solid #d5d5d5;
+}
+.btn-outline:hover {
+  background: #f7f7f7;
+  border-color: #aaa;
+}
+.btn-outline:active {
+  background: #eee;
+  border-color: #999;
+}
+.btn:disabled {
+  background: #e5e5e5;
+  color: #b0b0b0;
+  cursor: not-allowed;
+  border-color: #ddd;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ===== Progress ===== */
+.progress-wrap {
+  margin-bottom: 20px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px 18px 12px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e8e8e8;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #444, #222);
+  border-radius: 8px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.progress-text {
+  font-size: 12px;
+  color: #999;
+  text-align: right;
+  font-weight: 500;
+}
+
+/* ===== Quiz Items ===== */
+.question-item {
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #eee;
+}
 .question-item:last-child { border-bottom: none; }
-.q-text { font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #333; }
-.options { display: flex; flex-wrap: wrap; gap: 6px; }
-.opt-btn { flex: 1; min-width: 48px; padding: 7px 4px; border: 1.5px solid #ddd; border-radius: 18px; background: #fff; font-size: 12px; color: #666; cursor: pointer; text-align: center; transition: all 0.15s; }
-.opt-btn:hover { border-color: #999; color: #333; }
-.opt-btn.selected { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-.page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
-.page-nav span { font-size: 13px; color: #999; }
-.result-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-.result-table th, .result-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
-.result-table th { background: #fafafa; font-weight: 600; color: #1a1a1a; }
-.result-table td { color: #555; }
-.result-table tr:hover td { background: #fafafa; }
-.summary-box { background: #fafafa; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
-.summary-box p { font-size: 13px; margin-bottom: 4px; }
-.summary-box strong { color: #1a1a1a; }
-.level-badge { display: inline-block; padding: 3px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+.q-text {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #3a3a3a;
+  letter-spacing: 0.2px;
+}
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.opt-btn {
+  flex: 1;
+  min-width: 52px;
+  padding: 9px 6px;
+  border: 1.5px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  color: #888;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.opt-btn:hover {
+  border-color: #aaa;
+  color: #444;
+  background: #fafafa;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.opt-btn.selected {
+  background: #222;
+  color: #fff;
+  border-color: #222;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transform: scale(1.03);
+}
+
+/* ===== Page Nav ===== */
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  padding: 0 2px;
+}
+.page-nav span {
+  font-size: 13px;
+  color: #aaa;
+  font-weight: 500;
+}
+
+/* ===== Guide Table ===== */
+.guide-table-wrapper {
+  margin-top: 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+/* ===== Result Summary ===== */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.summary-item {
+  background: #f8f8f8;
+  border-radius: 12px;
+  padding: 18px 14px;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s;
+}
+.summary-item:hover {
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+.summary-item .summary-val {
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+}
+.summary-item .summary-label {
+  font-size: 12px;
+  color: #999;
+  font-weight: 500;
+}
+
+/* ===== Result Table ===== */
+.result-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+.result-table thead th {
+  background: #f5f5f5;
+  font-weight: 600;
+  color: #333;
+  font-size: 13px;
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 2px solid #e8e8e8;
+  letter-spacing: 0.3px;
+}
+.result-table tbody td {
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #555;
+  border-bottom: 1px solid #f0f0f0;
+}
+.result-table tbody tr:nth-child(even) td {
+  background: #fafafa;
+}
+.result-table tbody tr:nth-child(odd) td {
+  background: #fff;
+}
+.result-table tbody tr:hover td {
+  background: #f2f2f2;
+}
+
+/* ===== Radar Chart ===== */
+.radar-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0 4px;
+}
+.radar-wrap canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ===== Level Badges ===== */
+.level-badge {
+  display: inline-block;
+  padding: 3px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
 .level-normal { background: #e8f5e9; color: #2e7d32; }
-.level-mild { background: #fff3e0; color: #e65100; }
+.level-mild   { background: #fff3e0; color: #e65100; }
 .level-moderate { background: #fce4ec; color: #c62828; }
 .level-severe { background: #f3e5f5; color: #6a1b9a; }
-.footer { text-align: center; padding: 20px 16px 24px; font-size: 11px; color: #aaa; }
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center;
+  padding: 32px 16px 28px;
+  font-size: 11px;
+  color: #bbb;
+  border-top: 1px solid #e8e8e8;
+  margin-top: 8px;
+}
 .footer p { margin-bottom: 4px; }
-.footer .tip { color: #888; font-size: 12px; margin-top: 6px; font-weight: 500; }
+.footer .tip {
+  color: #999;
+  font-size: 12px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+  .container { padding: 12px 10px; }
+  .card { padding: 20px 16px; border-radius: 14px; }
+  .header h1 { font-size: 22px; }
+  .summary-grid { grid-template-columns: 1fr; gap: 10px; }
+  .opt-btn { min-width: 44px; padding: 8px 4px; font-size: 12px; }
+}
 </style>
 </head>
 <body>
@@ -66,7 +346,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
 <div id="page-intro" class="card">
   <h2>指导语</h2>
   <p style="font-size:13px; color:#666;">以下列出了有些人可能会有的问题，请仔细阅读每一条，然后根据<strong>最近一周</strong>以来的实际感觉，选择最符合您情况的选项。</p>
-  <div style="margin-top:14px; border:1px solid #e0e0e0; border-radius:8px; overflow:hidden;">
+  <div class="guide-table-wrapper">
     <div style="display:flex; background:#f5f5f5; font-size:11px; color:#888; text-align:center; border-bottom:1px solid #e0e0e0;">
       <div style="width:18%; padding:8px 4px;">选项</div>
       <div style="width:26%; padding:8px 4px;">程度</div>
@@ -402,11 +682,16 @@ function submitTest() {
   // 构建结果HTML
   var html = '';
   html += '<div class="card"><h2>测试结果</h2>';
-  html += '<div class="summary-box">';
-  html += '<p><strong>总分：</strong>' + totalScore + ' <span class="level-badge ' + overallLevel.cls + '">' + overallLevel.text + '</span></p>';
-  html += '<p><strong>总均分：</strong>' + avgScore + '</p>';
-  html += '<p><strong>阳性项目数：</strong>' + positiveCount + '（得分≥2的项目数）</p>';
+  html += '<div class="summary-grid">';
+  html += '<div class="summary-item"><div class="summary-val">' + totalScore + '</div><div class="summary-label">总分</div></div>';
+  html += '<div class="summary-item"><div class="summary-val">' + avgScore + '</div><div class="summary-label">总均分</div></div>';
+  html += '<div class="summary-item"><div class="summary-val">' + positiveCount + '</div><div class="summary-label">阳性项目数</div></div>';
   html += '</div>';
+  html += '<p style="font-size:13px;color:#888;margin-bottom:8px;">综合评级：<span class="level-badge ' + overallLevel.cls + '">' + overallLevel.text + '</span> &nbsp;（得分≥2的项目为阳性）</p>';
+
+  // 雷达图
+  html += '<div class="card"><h2>因子得分雷达图</h2>';
+  html += '<div class="radar-wrap"><canvas id="radar-canvas" width="500" height="500"></canvas></div></div>';
 
   html += '<h2 style="font-size:15px;margin-bottom:8px;">各因子得分</h2>';
   html += '<table class="result-table">';
@@ -436,6 +721,102 @@ function submitTest() {
 
   // 滚动到顶部
   window.scrollTo(0, 0);
+
+  // 绘制雷达图（setTimeout 确保 canvas 已渲染到 DOM）
+  setTimeout(function() { drawRadar(factorScores, factorNamesOrder); }, 50);
+}
+
+function drawRadar(factorScores, factorNamesOrder) {
+  var canvas = document.getElementById('radar-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+
+  var n = factorNamesOrder.length;  // 10 个因子
+  var cx = 250, cy = 250, r = 200;
+  var levels = 5;
+
+  // 清除画布
+  ctx.clearRect(0, 0, 500, 500);
+
+  // ---- 绘制 5 层刻度多边形 ----
+  for (var lv = 1; lv <= levels; lv++) {
+    var lr = r * lv / levels;
+    ctx.beginPath();
+    for (var i = 0; i < n; i++) {
+      var angle = Math.PI * 2 * i / n - Math.PI / 2;
+      var x = cx + lr * Math.cos(angle);
+      var y = cy + lr * Math.sin(angle);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = '#bbb';
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+  }
+
+  // ---- 绘制从中心到各顶点的轴线 ----
+  for (var i = 0; i < n; i++) {
+    var angle = Math.PI * 2 * i / n - Math.PI / 2;
+    var x = cx + r * Math.cos(angle);
+    var y = cy + r * Math.sin(angle);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = '#ddd';
+    ctx.lineWidth = 0.6;
+    ctx.stroke();
+  }
+
+  // ---- 因子标签 ----
+  ctx.fillStyle = '#444';
+  ctx.font = '13px "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  var labelDist = r + 32;
+  for (var i = 0; i < n; i++) {
+    var angle = Math.PI * 2 * i / n - Math.PI / 2;
+    var lx = cx + labelDist * Math.cos(angle);
+    var ly = cy + labelDist * Math.sin(angle);
+    ctx.fillText(factorNamesOrder[i], lx, ly);
+  }
+
+  // ---- 提取各因子均分 ----
+  var dataValues = [];
+  for (var i = 0; i < n; i++) {
+    dataValues.push(parseFloat(factorScores[factorNamesOrder[i]].avg));
+  }
+
+  // ---- 绘制数据填充多边形 ----
+  ctx.beginPath();
+  for (var i = 0; i < n; i++) {
+    var val = dataValues[i];
+    var dr = r * val / 5;  // 映射到 0-200
+    var angle = Math.PI * 2 * i / n - Math.PI / 2;
+    var dx = cx + dr * Math.cos(angle);
+    var dy = cy + dr * Math.sin(angle);
+    if (i === 0) ctx.moveTo(dx, dy);
+    else ctx.lineTo(dx, dy);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(80,80,80,0.13)';
+  ctx.fill();
+  ctx.strokeStyle = '#444';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // ---- 数据点小圆点 ----
+  for (var i = 0; i < n; i++) {
+    var val = dataValues[i];
+    var dr = r * val / 5;
+    var angle = Math.PI * 2 * i / n - Math.PI / 2;
+    var dx = cx + dr * Math.cos(angle);
+    var dy = cy + dr * Math.sin(angle);
+    ctx.beginPath();
+    ctx.arc(dx, dy, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#222';
+    ctx.fill();
+  }
 }
 </script>
 
