@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCL-90 症状自评量表</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+.container { max-width: 720px; margin: 0 auto; padding: 16px; }
+.header { text-align: center; padding: 24px 0 8px; }
+.header h1 { font-size: 22px; font-weight: 700; color: #1a1a1a; }
+.header p { font-size: 13px; color: #888; margin-top: 4px; }
+.card { background: #fff; border-radius: 14px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #1a1a1a; }
+.btn { display: inline-block; padding: 10px 28px; border: none; border-radius: 22px; font-size: 15px; cursor: pointer; transition: background 0.2s; }
+.btn-primary { background: #1a1a1a; color: #fff; }
+.btn-primary:hover { background: #333; }
+.btn-primary:active { background: #000; }
+.btn-outline { background: #fff; color: #1a1a1a; border: 1.5px solid #ccc; }
+.btn-outline:hover { background: #f0f0f0; }
+.btn-outline:active { background: #e0e0e0; }
+.btn:disabled { background: #ccc; color: #999; cursor: not-allowed; border-color: #ccc; }
+.progress-wrap { margin-bottom: 16px; }
+.progress-bar { width: 100%; height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden; margin-bottom: 4px; }
+.progress-fill { height: 100%; background: #1a1a1a; border-radius: 3px; transition: width 0.3s; }
+.progress-text { font-size: 12px; color: #999; text-align: right; }
+.question-item { margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
+.question-item:last-child { border-bottom: none; }
+.q-text { font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #333; }
+.options { display: flex; flex-wrap: wrap; gap: 6px; }
+.opt-btn { flex: 1; min-width: 48px; padding: 7px 4px; border: 1.5px solid #ddd; border-radius: 18px; background: #fff; font-size: 12px; color: #666; cursor: pointer; text-align: center; transition: all 0.15s; }
+.opt-btn:hover { border-color: #999; color: #333; }
+.opt-btn.selected { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+.page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+.page-nav span { font-size: 13px; color: #999; }
+.result-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+.result-table th, .result-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+.result-table th { background: #fafafa; font-weight: 600; color: #1a1a1a; }
+.result-table td { color: #555; }
+.result-table tr:hover td { background: #fafafa; }
+.summary-box { background: #fafafa; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+.summary-box p { font-size: 13px; margin-bottom: 4px; }
+.summary-box strong { color: #1a1a1a; }
+.level-badge { display: inline-block; padding: 3px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+.level-normal { background: #e8f5e9; color: #2e7d32; }
+.level-mild { background: #fff3e0; color: #e65100; }
+.level-moderate { background: #fce4ec; color: #c62828; }
+.level-severe { background: #f3e5f5; color: #6a1b9a; }
+.footer { text-align: center; padding: 20px 16px 24px; font-size: 11px; color: #aaa; }
+.footer p { margin-bottom: 4px; }
+.footer .tip { color: #888; font-size: 12px; margin-top: 6px; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- 头部 -->
+<div class="header">
+  <h1>SCL-90 症状自评量表</h1>
+  <p>共 90 题 | 请根据最近一周的实际情况作答</p>
+</div>
+
+<!-- 引导页 -->
+<div id="page-intro" class="card">
+  <h2>指导语</h2>
+  <p style="font-size:13px; color:#666;">以下列出了有些人可能会有的问题，请仔细阅读每一条，然后根据最近一周以来的实际感觉，选择最符合您情况的选项。</p>
+  <p style="font-size:12px; color:#999; margin-top:8px;">1 — 没有（无该项症状）<br>2 — 很轻（有症状但轻微）<br>3 — 中等（有症状且有一定影响）<br>4 — 偏重（症状较重）<br>5 — 严重（症状频繁且严重）</p>
+  <div id="intro-start-btn" style="text-align:center; margin-top:18px;">
+    <button class="btn btn-primary" onclick="startTest()">开始测试</button>
+  </div>
+</div>
+
+<!-- 答题区 -->
+<div id="page-quiz" style="display:none;">
+  <div class="progress-wrap">
+    <div class="progress-bar"><div id="progress-fill" class="progress-fill" style="width:0%;"></div></div>
+    <div id="progress-text" class="progress-text">0/90</div>
+  </div>
+  <div id="quiz-list" class="card"></div>
+  <div class="page-nav">
+    <button id="btn-prev" class="btn btn-outline" onclick="prevPage()" disabled="true" style="visibility:hidden;">上一页</button>
+    <span id="page-indicator">第 1/9 页</span>
+    <button id="btn-next" class="btn btn-outline" onclick="nextPage()">下一页</button>
+  </div>
+</div>
+
+<!-- 提交确认 -->
+<div id="page-submit" style="display:none;">
+  <div class="card" style="text-align:center;">
+    <h2>确认提交</h2>
+    <p style="font-size:13px;color:#888;">您已完成全部 90 道题目，点击下方按钮提交答案。</p>
+    <p id="unanswered-hint" style="font-size:12px;color:#e65100;margin:8px 0;display:none;"></p>
+    <div style="margin-top:16px;display:flex;gap:10px;justify-content:center;">
+      <button class="btn btn-outline" onclick="goBackToQuiz()">返回修改</button>
+      <button id="btn-submit" class="btn btn-primary" onclick="submitTest()">提交答案</button>
+    </div>
+  </div>
+</div>
+
+<!-- 结果区 -->
+<div id="page-result" style="display:none;">
+  <div id="result-content"></div>
+</div>
+
+<!-- 底部 -->
+<div class="footer">
+  <p>本测试仅为心理健康自评工具，不构成临床诊断。如有心理健康方面的疑虑，请咨询专业心理医生或精神科医师。</p>
+  <p>SCL-90（Symptom Checklist 90）由 L.R. Derogatis 于 1975 年编制。</p>
+  <p class="tip">如无法点击，请用系统浏览器（非微信/QQ）打开此文件</p>
+</div>
+
+</div>
+
+<script>
+// ===== SCL-90 题目定义 =====
+var questions = [
+  {id:1,  factor:"躯体化", text:"头痛"},
+  {id:2,  factor:"躯体化", text:"神经过敏，心中不踏实"},
+  {id:3,  factor:"强迫症状", text:"头脑中有不必要的想法或字句盘旋"},
+  {id:4,  factor:"躯体化", text:"头晕或晕倒"},
+  {id:5,  factor:"其他", text:"对异性的兴趣减退"},
+  {id:6,  factor:"敌对", text:"对旁人责备求全"},
+  {id:7,  factor:"躯体化", text:"感到别人能控制您的思想"},
+  {id:8,  factor:"其他", text:"责怪别人制造麻烦"},
+  {id:9,  factor:"强迫症状", text:"忘性大"},
+  {id:10, factor:"强迫症状", text:"担心自己的衣饰整齐及仪态的端正"},
+  {id:11, factor:"敌对", text:"容易烦恼和激动"},
+  {id:12, factor:"躯体化", text:"胸痛"},
+  {id:13, factor:"恐怖", text:"害怕空旷的场所或街道"},
+  {id:14, factor:"躯体化", text:"感到自己的精力下降，活动减慢"},
+  {id:15, factor:"其他", text:"想结束自己的生命"},
+  {id:16, factor:"其他", text:"听到旁人听不到的声音"},
+  {id:17, factor:"躯体化", text:"发抖"},
+  {id:18, factor:"人际敏感", text:"感到大多数人都不可信任"},
+  {id:19, factor:"其他", text:"胃口不好"},
+  {id:20, factor:"抑郁", text:"容易哭泣"},
+  {id:21, factor:"人际敏感", text:"同异性相处时感到害羞不自在"},
+  {id:22, factor:"人际敏感", text:"感到受骗、中了圈套或有人想抓住您"},
+  {id:23, factor:"恐怖", text:"无缘无故地突然感到害怕"},
+  {id:24, factor:"敌对", text:"自己不能控制地大发脾气"},
+  {id:25, factor:"恐怖", text:"怕单独出门"},
+  {id:26, factor:"抑郁", text:"经常责怪自己"},
+  {id:27, factor:"躯体化", text:"腰痛"},
+  {id:28, factor:"强迫症状", text:"感到难以完成任务"},
+  {id:29, factor:"抑郁", text:"感到孤独"},
+  {id:30, factor:"抑郁", text:"感到苦闷"},
+  {id:31, factor:"焦虑", text:"过分担忧"},
+  {id:32, factor:"抑郁", text:"对事物不感兴趣"},
+  {id:33, factor:"恐怖", text:"感到害怕"},
+  {id:34, factor:"人际敏感", text:"您的感情容易受到伤害"},
+  {id:35, factor:"人际敏感", text:"旁人能知道您的私下想法"},
+  {id:36, factor:"人际敏感", text:"感到别人不理解您、不同情您"},
+  {id:37, factor:"人际敏感", text:"感到人们对您不友好、不喜欢您"},
+  {id:38, factor:"强迫症状", text:"做事必须做得很慢以保证做得正确"},
+  {id:39, factor:"焦虑", text:"心跳得很厉害"},
+  {id:40, factor:"躯体化", text:"恶心或胃部不舒服"},
+  {id:41, factor:"人际敏感", text:"感到比不上他人"},
+  {id:42, factor:"躯体化", text:"肌肉酸痛"},
+  {id:43, factor:"人际敏感", text:"感到有人在监视您、谈论您"},
+  {id:44, factor:"其他", text:"难以入睡"},
+  {id:45, factor:"强迫症状", text:"做事必须反复检查"},
+  {id:46, factor:"强迫症状", text:"难以做出决定"},
+  {id:47, factor:"恐怖", text:"怕乘电车、公共汽车、地铁或火车"},
+  {id:48, factor:"躯体化", text:"呼吸有困难"},
+  {id:49, factor:"躯体化", text:"一阵阵发冷或发热"},
+  {id:50, factor:"恐怖", text:"因为感到害怕而避开某些东西、场合或活动"},
+  {id:51, factor:"强迫症状", text:"脑子变空了"},
+  {id:52, factor:"躯体化", text:"身体发麻或刺痛"},
+  {id:53, factor:"躯体化", text:"喉咙有梗塞感"},
+  {id:54, factor:"抑郁", text:"感到前途没有希望"},
+  {id:55, factor:"强迫症状", text:"不能集中注意力"},
+  {id:56, factor:"躯体化", text:"感到身体的某一部分软弱无力"},
+  {id:57, factor:"焦虑", text:"感到紧张或容易紧张"},
+  {id:58, factor:"躯体化", text:"感到手或脚发重"},
+  {id:59, factor:"其他", text:"想到死亡的事"},
+  {id:60, factor:"其他", text:"吃得太多"},
+  {id:61, factor:"人际敏感", text:"当别人看着您或谈论您时感到不自在"},
+  {id:62, factor:"其他", text:"有一些不属于您自己的想法"},
+  {id:63, factor:"敌对", text:"有想打人或伤害他人的冲动"},
+  {id:64, factor:"其他", text:"醒得太早"},
+  {id:65, factor:"强迫症状", text:"必须反复洗手、点数目或触摸某些东西"},
+  {id:66, factor:"其他", text:"睡得不稳不深"},
+  {id:67, factor:"敌对", text:"有想摔坏或破坏东西的冲动"},
+  {id:68, factor:"其他", text:"有一些别人没有的想法或念头"},
+  {id:69, factor:"人际敏感", text:"感到对别人神经过敏"},
+  {id:70, factor:"人际敏感", text:"在商店或电影院等人多的地方感到不自在"},
+  {id:71, factor:"抑郁", text:"感到任何事情都很困难"},
+  {id:72, factor:"焦虑", text:"一阵阵恐惧或惊恐"},
+  {id:73, factor:"人际敏感", text:"感到在公共场合吃东西很不舒服"},
+  {id:74, factor:"敌对", text:"经常与人争论"},
+  {id:75, factor:"恐怖", text:"单独一人时神经很紧张"},
+  {id:76, factor:"人际敏感", text:"别人对您的成绩没有作出恰当的评价"},
+  {id:77, factor:"人际敏感", text:"即使和别人在一起也感到孤单"},
+  {id:78, factor:"焦虑", text:"感到坐立不安心神不定"},
+  {id:79, factor:"抑郁", text:"感到自己没有什么价值"},
+  {id:80, factor:"焦虑", text:"感到熟悉的东西变得陌生或不像是真的"},
+  {id:81, factor:"敌对", text:"大叫或摔东西"},
+  {id:82, factor:"恐怖", text:"害怕会在公共场合晕倒"},
+  {id:83, factor:"人际敏感", text:"感到别人想占您的便宜"},
+  {id:84, factor:"其他", text:"为一些有关性的想法而很苦恼"},
+  {id:85, factor:"其他", text:"您认为应该因为自己的过错而受到惩罚"},
+  {id:86, factor:"焦虑", text:"感到要赶快把事情做完"},
+  {id:87, factor:"躯体化", text:"感到自己的身体有严重问题"},
+  {id:88, factor:"其他", text:"从未感到和其他人很亲近"},
+  {id:89, factor:"抑郁", text:"感到自己有罪"},
+  {id:90, factor:"精神病性", text:"感到自己的脑子有毛病"}
+];
+
+var TOTAL = 90;
+var PER_PAGE = 10;
+var TOTAL_PAGES = Math.ceil(TOTAL / PER_PAGE);
+var currentPage = 0;
+var answers = {};
+
+// 因子名列表
+var factorNames = ["躯体化","强迫症状","人际敏感","抑郁","焦虑","敌对","恐怖","偏执","精神病性","其他"];
+
+function selectOption(qid, val, el) {
+  answers[qid] = val;
+  var siblings = el.parentNode.children;
+  for (var i = 0; i < siblings.length; i++) {
+    siblings[i].className = "opt-btn";
+  }
+  el.className = "opt-btn selected";
+}
+
+function startTest() {
+  currentPage = 0;
+  answers = {};
+  document.getElementById("page-intro").style.display = "none";
+  document.getElementById("page-submit").style.display = "none";
+  document.getElementById("page-result").style.display = "none";
+  document.getElementById("page-quiz").style.display = "block";
+  renderPage(0);
+}
+
+function renderPage(page) {
+  currentPage = page;
+  var start = page * PER_PAGE;
+  var end = Math.min(start + PER_PAGE, TOTAL);
+  var html = "";
+  for (var i = start; i < end; i++) {
+    var q = questions[i];
+    var val = answers[q.id] || 0;
+    html += '<div class="question-item">';
+    html += '<div class="q-text">' + q.id + '. ' + q.text + '</div>';
+    html += '<div class="options">';
+    for (var v = 1; v <= 5; v++) {
+      var cls = (val === v) ? "opt-btn selected" : "opt-btn";
+      html += '<button class="' + cls + '" onclick="selectOption(' + q.id + ',' + v + ',this)">' + v + '</button>';
+    }
+    html += '</div></div>';
+  }
+  document.getElementById("quiz-list").innerHTML = html;
+
+  var answered = 0;
+  for (var k in answers) { if (answers.hasOwnProperty(k) && answers[k] > 0) answered++; }
+  var pct = Math.round(answered / TOTAL * 100);
+  document.getElementById("progress-fill").style.width = pct + "%";
+  document.getElementById("progress-text").textContent = answered + "/" + TOTAL;
+  document.getElementById("page-indicator").textContent = "第 " + (page + 1) + "/" + TOTAL_PAGES + " 页";
+
+  var btnPrev = document.getElementById("btn-prev");
+  var btnNext = document.getElementById("btn-next");
+
+  if (page === 0) {
+    btnPrev.style.visibility = "hidden";
+    btnPrev.disabled = true;
+  } else {
+    btnPrev.style.visibility = "visible";
+    btnPrev.disabled = false;
+  }
+
+  if (page === TOTAL_PAGES - 1) {
+    btnNext.textContent = "完成答题";
+  } else {
+    btnNext.textContent = "下一页";
+  }
+}
+
+function nextPage() {
+  if (currentPage < TOTAL_PAGES - 1) {
+    renderPage(currentPage + 1);
+  } else {
+    // 检查未答题
+    var unanswered = [];
+    for (var i = 0; i < TOTAL; i++) {
+      if (!answers[questions[i].id] || answers[questions[i].id] === 0) {
+        unanswered.push(questions[i].id);
+      }
+    }
+    document.getElementById("page-quiz").style.display = "none";
+    document.getElementById("page-submit").style.display = "block";
+    var hint = document.getElementById("unanswered-hint");
+    if (unanswered.length > 0) {
+      hint.style.display = "block";
+      hint.textContent = "还有 " + unanswered.length + " 题未作答（题号：" + unanswered.join(", ") + "），请返回补充或确认提交。";
+      document.getElementById("btn-submit").disabled = false; // 允许提交但提示
+    } else {
+      hint.style.display = "none";
+      document.getElementById("btn-submit").disabled = false;
+    }
+  }
+}
+
+function prevPage() {
+  if (currentPage > 0) {
+    renderPage(currentPage - 1);
+  }
+}
+
+function goBackToQuiz() {
+  document.getElementById("page-submit").style.display = "none";
+  document.getElementById("page-quiz").style.display = "block";
+  renderPage(TOTAL_PAGES - 1);
+}
+
+function submitTest() {
+  // 收集答案
+  var scores = [];
+  for (var i = 0; i < TOTAL; i++) {
+    var q = questions[i];
+    scores.push(answers[q.id] || 1); // 默认1分
+  }
+
+  // 计算因子映射
+  var factorMap = {
+    "躯体化":     [1,4,12,27,40,42,48,49,52,53,56,58],
+    "强迫症状":   [3,9,10,28,38,45,46,51,55,65],
+    "人际敏感":   [6,21,34,36,37,41,61,69,73],
+    "抑郁":       [5,14,15,20,22,26,29,30,31,32,54,71,79],
+    "焦虑":       [2,17,23,33,39,57,72,78,80,86],
+    "敌对":       [11,24,63,67,74,81],
+    "恐怖":       [13,25,47,50,70,75,82],
+    "偏执":       [8,18,43,68,76,83],
+    "精神病性":   [7,16,35,62,77,84,85,87,88,90],
+    "其他":       [19,44,59,60,64,66,89]
+  };
+
+  var totalScore = 0;
+  for (var i = 0; i < TOTAL; i++) { totalScore += scores[i]; }
+  var avgScore = (totalScore / TOTAL).toFixed(2);
+  var positiveCount = 0;
+  for (var i = 0; i < TOTAL; i++) { if (scores[i] >= 2) positiveCount++; }
+
+  var factorScores = {};
+  var factorNamesOrder = ["躯体化","强迫症状","人际敏感","抑郁","焦虑","敌对","恐怖","偏执","精神病性","其他"];
+  for (var f = 0; f < factorNamesOrder.length; f++) {
+    var fn = factorNamesOrder[f];
+    var ids = factorMap[fn];
+    var sum = 0;
+    for (var j = 0; j < ids.length; j++) {
+      var qIdx = ids[j] - 1;
+      sum += scores[qIdx];
+    }
+    factorScores[fn] = { sum: sum, count: ids.length, avg: (sum / ids.length).toFixed(2) };
+  }
+
+  // 四级评级
+  function getLevel(avg) {
+    if (avg < 2) return { text: "正常", cls: "level-normal" };
+    if (avg < 3) return { text: "轻度", cls: "level-mild" };
+    if (avg < 4) return { text: "中度", cls: "level-moderate" };
+    return { text: "重度", cls: "level-severe" };
+  }
+  var overallLevel = getLevel(parseFloat(avgScore));
+
+  // 构建结果HTML
+  var html = '';
+  html += '<div class="card"><h2>测试结果</h2>';
+  html += '<div class="summary-box">';
+  html += '<p><strong>总分：</strong>' + totalScore + ' <span class="level-badge ' + overallLevel.cls + '">' + overallLevel.text + '</span></p>';
+  html += '<p><strong>总均分：</strong>' + avgScore + '</p>';
+  html += '<p><strong>阳性项目数：</strong>' + positiveCount + '（得分≥2的项目数）</p>';
+  html += '</div>';
+
+  html += '<h2 style="font-size:15px;margin-bottom:8px;">各因子得分</h2>';
+  html += '<table class="result-table">';
+  html += '<thead><tr><th>因子</th><th>条目数</th><th>总分</th><th>均分</th><th>评级</th></tr></thead><tbody>';
+  for (var f = 0; f < factorNamesOrder.length; f++) {
+    var fn = factorNamesOrder[f];
+    var fs = factorScores[fn];
+    var lv = getLevel(parseFloat(fs.avg));
+    html += '<tr>';
+    html += '<td>' + fn + '</td>';
+    html += '<td>' + fs.count + '</td>';
+    html += '<td>' + fs.sum + '</td>';
+    html += '<td>' + fs.avg + '</td>';
+    html += '<td><span class="level-badge ' + lv.cls + '">' + lv.text + '</span></td>';
+    html += '</tr>';
+  }
+  html += '</tbody></table>';
+
+  html += '<p style="font-size:11px;color:#aaa;margin-top:12px;">评分标准参考 SCL-90 常模：均分＜2为正常，2-3为轻度，3-4为中度，≥4为重度。结果仅供参考。</p>';
+  html += '<div style="text-align:center;margin-top:16px;"><button class="btn btn-primary" onclick="startTest()">重新测试</button></div>';
+  html += '</div>';
+
+  document.getElementById("page-submit").style.display = "none";
+  document.getElementById("page-quiz").style.display = "none";
+  document.getElementById("result-content").innerHTML = html;
+  document.getElementById("page-result").style.display = "block";
+
+  // 滚动到顶部
+  window.scrollTo(0, 0);
+}
+</script>
+
+</body>
+</html>
