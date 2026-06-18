@@ -108,7 +108,6 @@ body {
 .btn-secondary:disabled { background: #f8f0ee; color: #d0c0c0; border-color: #f0e4e0; cursor: not-allowed; }
 
 /* ===== Quiz ===== */
-.quiz-list {}
 .q-card {
   background: #fff; border-radius: 16px; padding: 18px 18px 14px;
   margin-bottom: 12px; box-shadow: 0 1px 8px rgba(160,120,120,0.04);
@@ -138,7 +137,6 @@ body {
 
 /* ===== Submit Page ===== */
 .submit-card { text-align: center; }
-.submit-card .check-icon { font-size: 48px; margin: 8px 0; display: block; }
 .submit-hint { font-size: 12px; color: #c46040; margin: 8px 0; display: none; background: #fef5f0; padding: 8px 14px; border-radius: 10px; }
 
 /* ===== Results ===== */
@@ -154,7 +152,7 @@ body {
   flex: 1; background: #fff; border-radius: 16px; padding: 18px 10px; text-align: center;
   box-shadow: 0 3px 18px rgba(160,120,120,0.10);
 }
-.summary-card .s-val { font-size: 26px; font-weight: 700; color: #ab7078; margin-bottom: 2px; transition: all 0.6s; }
+.summary-card .s-val { font-size: 26px; font-weight: 700; color: #ab7078; margin-bottom: 2px; }
 .summary-card .s-label { font-size: 11px; color: #b09898; font-weight: 500; }
 
 .overall-badge {
@@ -165,6 +163,44 @@ body {
 .badge-mild { background: #fef0e0; color: #8a5a20; }
 .badge-moderate { background: #fce8e0; color: #8a3020; }
 .badge-severe { background: #fce0e8; color: #7a1a3a; }
+
+/* ===== Analysis & Suggestions ===== */
+.analysis-section { margin-top: 14px; }
+.analysis-section .an-head {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 700; color: #3d2e33; margin-bottom: 10px;
+}
+.analysis-text {
+  font-size: 13px; color: #5a4a50; line-height: 1.85;
+  background: #fdf7f5; border-radius: 12px; padding: 16px;
+  margin-bottom: 12px;
+}
+.analysis-text p { margin-bottom: 8px; }
+.analysis-text p:last-child { margin-bottom: 0; }
+
+.suggest-card {
+  background: #fefbfa; border: 1.5px solid #f0e4e0; border-radius: 14px; padding: 16px;
+}
+.suggest-card .sg-head {
+  font-size: 13px; font-weight: 700; color: #6a4a50; margin-bottom: 10px;
+}
+.suggest-item {
+  display: flex; align-items: flex-start; gap: 10px; padding: 8px 0;
+  border-bottom: 1px solid #f8f0ee; font-size: 12px; color: #5a4a50; line-height: 1.6;
+}
+.suggest-item:last-child { border-bottom: none; padding-bottom: 0; }
+.suggest-item .sg-icon {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; margin-top: 1px;
+}
+.sg-icon.self { background: #e8f0e8; color: #3d6e3d; }
+.sg-icon.social { background: #e8e4f4; color: #5a40a0; }
+.sg-icon.pro { background: #fef0e0; color: #8a5a20; }
+
+.disclaimer {
+  font-size: 10px; color: #c8b8b8; text-align: center; margin-top: 14px; line-height: 1.6;
+}
 
 /* Factor Cards Grid */
 .factor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
@@ -237,7 +273,6 @@ body {
   .intro-guide .g-row.header-row { background: #2a1e26; color: #d0b8c0; }
   .intro-guide .g-desc { color: #b0a0a8; }
   .btn-secondary { background: #241820; color: #c8b0b8; border-color: #3a2830; }
-  .btn-secondary:hover { border-color: #b87080; color: #b87080; background: #2a1e26; }
   .q-card { background: #241820; box-shadow: 0 1px 8px rgba(0,0,0,0.2); }
   .q-text { color: #d8c8d0; }
   .opt-chip { background: #241820; border-color: #3a2830; color: #907888; }
@@ -262,6 +297,15 @@ body {
   .footer p { color: #6a5060; }
   .page-nav .page-label { color: #907888; }
   .progress-text-row { color: #907888; }
+  .analysis-text { background: #2a1e26; color: #b8a8b0; }
+  .analysis-section .an-head { color: #d8c8d0; }
+  .suggest-card { background: #241820; border-color: #3a2830; }
+  .suggest-card .sg-head { color: #c8b0b8; }
+  .suggest-item { color: #b0a0a8; border-bottom-color: #2a1e26; }
+  .sg-icon.self { background: #1e2e1e; color: #6aaa6a; }
+  .sg-icon.social { background: #202030; color: #9080d0; }
+  .sg-icon.pro { background: #2e2418; color: #c09040; }
+  .disclaimer { color: #6a5060; }
 }
 </style>
 </head>
@@ -313,7 +357,7 @@ body {
 <!-- Submit Page -->
 <div id="page-submit" style="display:none;">
   <div class="card submit-card">
-    <span class="check-icon">📋</span>
+    <span style="font-size:48px;margin:8px 0;display:block;">📋</span>
     <h2 style="font-size:17px;color:#3d2e33;margin-bottom:4px;">确认提交</h2>
     <p style="font-size:13px;color:#7a6a70;">您已完成全部 90 道题目</p>
     <p class="submit-hint" id="submit-hint"></p>
@@ -403,11 +447,6 @@ function buildSteps(){
   document.getElementById("progress-steps").innerHTML=h;
 }
 
-function getScoreClass(v){
-  if(v===1)return "normal"; if(v===2)return "mild";
-  if(v===3)return "mild"; if(v===4)return "moderate"; return "severe";
-}
-
 function selectOpt(qid,val,el){
   answers[qid]=val;
   var row=el.parentNode;
@@ -420,10 +459,7 @@ function renderPage(page){
   var start=page*PER_PAGE, end=Math.min(start+PER_PAGE,TOTAL), html="";
   for(var i=start;i<end;i++){
     var q=questions[i], val=answers[q.id]||0;
-    html+='<div class="q-card">';
-    html+='<div class="q-num">#'+q.id+'</div>';
-    html+='<div class="q-text">'+q.t+'</div>';
-    html+='<div class="opt-row">';
+    html+='<div class="q-card"><div class="q-num">#'+q.id+'</div><div class="q-text">'+q.t+'</div><div class="opt-row">';
     for(var v=1;v<=5;v++){
       var cls="opt-chip"+(val===v?" selected":"");
       html+='<button class="'+cls+'" data-v="'+v+'" onclick="selectOpt('+q.id+','+v+',this)">'+v+'</button>';
@@ -435,11 +471,8 @@ function renderPage(page){
   document.getElementById("progress-text").textContent=answered+" / "+TOTAL;
   document.getElementById("page-label").textContent="第 "+(page+1)+"/"+TOTAL_PAGES+" 页";
   for(var i=0;i<TOTAL_PAGES;i++){
-    var d=document.getElementById("step"+i);
-    if(!d)continue;
-    d.className="step-dot";
-    if(i<page)d.className+=" done";
-    if(i===page)d.className+=" current";
+    var d=document.getElementById("step"+i);if(!d)continue;
+    d.className="step-dot";if(i<page)d.className+=" done";if(i===page)d.className+=" current";
   }
   var bp=document.getElementById("btn-prev");
   bp.style.visibility=page===0?"hidden":"visible"; bp.disabled=page===0;
@@ -476,9 +509,59 @@ function getLevel(avg){
   return{text:"重度",cls:"severe"};
 }
 
+function getTopFactors(fScores,fOrder,minAvg){
+  var t=[];for(var i=0;i<fOrder.length;i++){
+    var fn=fOrder[i],fs=fScores[fn],a=parseFloat(fs.avg);if(a>=minAvg)t.push({name:fn,avg:a,level:getLevel(a)});
+  }t.sort(function(a,b){return b.avg-a.avg;});return t;
+}
+
+function generateAnalysis(totalScore,avgScore,posCount,overallLevel,fScores,fOrder){
+  var a=parseFloat(avgScore), top=getTopFactors(fScores,fOrder,2.5);
+  var st=a<2?"您的SCL-90总均分为"+avgScore+"分，心理健康状况整体处于<strong>正常</strong>范围。":
+    a<2.5?"您的SCL-90总均分为"+avgScore+"分，心理健康状况处于<strong>轻微偏高水平</strong>，整体尚在可控范围。":
+    a<3?"您的SCL-90总均分为"+avgScore+"分，心理健康状况处于<strong>轻度</strong>水平。":
+    a<4?"您的SCL-90总均分为"+avgScore+"分，心理健康状况处于<strong>中度</strong>水平，部分心理困扰已对日常生活产生明显影响。":
+    "您的SCL-90总均分为"+avgScore+"分，心理健康状况处于<strong>重度</strong>水平，多项症状已严重干扰日常功能。";
+  var dt="共90个题目中有<strong>"+posCount+"个阳性项目</strong>（得分≥2），"+(posCount>63?"远":"")+"超过正常范围（常模约 24.92 项）。";
+  var et="";
+  if(top.length>0){var ns=[];for(var i=0;i<Math.min(top.length,4);i++)ns.push(top[i].name+"（均分"+top[i].avg.toFixed(2)+"）");et="其中，"+(ns.join("、"))+"等维度得分偏高，提示这些领域存在一定的困扰，建议重点关注。";}
+  var rt=a<2?"目前各项指标均在正常范围，无明显风险信号。保持当前状态即可。":
+    a<2.5?"当前处于临界状态，虽未达到临床关注水平，但部分指标已接近边界，若不加以调节，可能进一步发展。":
+    a<3?"轻度水平通常与近期生活压力、工作负荷或人际变动有关，及时调整可较快恢复。":
+    a<4?"中度水平意味着心理困扰已较明显，可能影响到睡眠、情绪稳定性、工作效率和人际关系，建议尽早采取干预措施。":
+    "重度水平提示心理健康问题较严重，部分症状如持续低落、躯体不适或人际退缩可能已达到需要专业干预的程度，请务必重视。";
+  return '<div class="analysis-text"><p>'+st+'</p><p>'+dt+'</p>'+(et?'<p>'+et+'</p>':'')+'<p>'+rt+'</p></div>';
+}
+
+function generateSuggestions(overallLevel,topFactors){
+  var selfs, socs, pros;
+  if(overallLevel.cls==="normal"){
+    selfs=["保持当前生活节奏和作息规律","每周 2-3 次有氧运动","培养正念习惯，每天留出 10-15 分钟独处放松"];
+    socs="继续保持与家人朋友的良好互动，定期进行高质量社交活动";
+    pros="无需特别干预。如有兴趣，可定期做心理自评作为自我关怀参考";
+  }else if(overallLevel.cls==="mild"){
+    selfs=["保证每天 7-8 小时充足睡眠，固定入睡起床时间","每天 30 分钟中等强度运动释放压力","尝试正念冥想或深呼吸练习，每天 10 分钟即可缓解焦虑","减少咖啡因和酒精摄入"];
+    socs="主动与信任的亲友分享近期感受和压力，不必独自承受。社会支持是缓解心理困扰的最有效因素之一";
+    pros="若自我调整 2-4 周后无明显改善，或症状影响工作和睡眠，建议预约心理咨询师进行早期评估";
+  }else if(overallLevel.cls==="moderate"){
+    selfs=["建立规律作息时间表，即使睡不着也按时躺下培养睡眠节律","每天 30 分钟户外活动，阳光和新鲜空气有助改善情绪","学习正念减压（MBSR）或渐进式肌肉放松训练","减少社交媒体和负面新闻消费","记录情绪日记，觉察情绪波动触发因素"];
+    socs="避免社交退缩。即使困难，也尽量每周与朋友或家人有一次深度交流。可加入兴趣小组、读书会等低压力社交圈";
+    pros="强烈建议预约心理咨询师系统评估。中度症状通常适合认知行为疗法（CBT）或正念疗法，一般 8-12 次咨询可见显著改善。若伴明显躯体症状，可同时咨询精神科医生";
+  }else{
+    selfs=["立即建立规律作息，即使无睡意也按时卧床","每天至少 15 分钟户外散步","尝试腹式呼吸或 5-4-3-2-1 感官稳定法缓解急性焦虑","暂时远离高压环境和不健康社交关系"];
+    socs="切勿独自承受。请立即告知家人或亲近朋友，让他们陪伴您渡过难关。若不便与亲友沟通，可拨打 24 小时心理援助热线";
+    pros="请尽快预约精神科医生进行全面评估。重度症状可能需要药物+心理治疗联合方案，这是常见且有效的治疗路径。拖延只会让情况更困难，专业帮助完全可以改变现状";
+  }
+  var h='';
+  h+='<div class="suggest-item"><div class="sg-icon self">1</div><div><strong>自我调节</strong><br/>'+selfs.join("；")+'。</div></div>';
+  h+='<div class="suggest-item"><div class="sg-icon social">2</div><div><strong>社交支持</strong><br/>'+socs+'。</div></div>';
+  h+='<div class="suggest-item"><div class="sg-icon pro">3</div><div><strong>专业干预</strong><br/>'+pros+'。</div></div>';
+  return h;
+}
+
 function submitTest(){
   var scores=[];
-  for(var i=0;i<TOTAL;i++){var q=questions[i];scores.push(answers[q.id]||1);}
+  for(var i=0;i<TOTAL;i++)scores.push(answers[questions[i].id]||1);
   var factorMap={
     "躯体化":[1,4,12,27,40,42,48,49,52,53,56,58],
     "强迫症状":[3,9,10,28,38,45,46,51,55,65],
@@ -503,30 +586,48 @@ function submitTest(){
     fScores[fn]={sum:sum,count:ids.length,avg:(sum/ids.length).toFixed(2)};
   }
 
+  var now=new Date();
+  var timeStr=now.getFullYear()+"/"+("0"+(now.getMonth()+1)).slice(-2)+"/"+("0"+now.getDate()).slice(-2)+" "+("0"+now.getHours()).slice(-2)+":"+("0"+now.getMinutes()).slice(-2);
+
   var h='';
   h+='<div class="result-hero"><div class="rh-label">ASSESSMENT RESULT</div><div class="rh-title">SCL-90 测评报告</div></div>';
+  h+='<div class="card"><p style="text-align:center;font-size:12px;color:#b09898;">测评完成时间：'+timeStr+'</p></div>';
+
+  // Summary row
   h+='<div class="summary-row">';
   h+='<div class="summary-card"><div class="s-val anim-in">'+totalScore+'</div><div class="s-label">总分</div></div>';
   h+='<div class="summary-card"><div class="s-val anim-in">'+avgScore+'</div><div class="s-label">总均分</div></div>';
   h+='<div class="summary-card"><div class="s-val anim-in">'+posCount+'</div><div class="s-label">阳性项目</div></div>';
   h+='</div>';
-  h+='<div class="card"><p style="text-align:center;font-size:13px;">综合评级：<span class="overall-badge badge-'+overallLevel.cls+'">'+overallLevel.text+'</span></p>';
+
+  // Overall Assessment + Analysis + Suggestions
+  h+='<div class="card">';
+  h+='<p style="text-align:center;font-size:14px;margin-bottom:4px;">总体评估</p>';
+  h+='<p style="text-align:center;font-size:22px;font-weight:700;color:#ab7078;margin-bottom:6px;">'+totalScore+'<span style="font-size:12px;color:#b09898;font-weight:400;"> / 450 分</span></p>';
+  h+='<p style="text-align:center;margin-bottom:14px;"><span class="overall-badge badge-'+overallLevel.cls+'">'+overallLevel.text+'</span>'+(overallLevel.cls!=="normal"?'<span style="font-size:11px;color:#b09898;margin-left:6px;">需要关注</span>':'<span style="font-size:11px;color:#7ba87b;margin-left:6px;">继续保持</span>')+'</p>';
+  h+='<div class="analysis-section"><div class="an-head">综合分析与建议</div>';
+  h+=generateAnalysis(totalScore,avgScore,posCount,overallLevel,fScores,fOrder);
+  h+='<div class="suggest-card"><div class="sg-head">针对性建议</div>';
+  h+=generateSuggestions(overallLevel,getTopFactors(fScores,fOrder,2.5));
+  h+='</div>';
+  h+='<p class="disclaimer">本报告仅为心理健康自评工具的结果呈现，不构成临床诊断。如有紧急情绪危机，请立即联系心理援助热线。若症状持续超过 2 周无改善，建议尽早预约心理咨询师或精神科医生进行专业评估。</p>';
+  h+='</div></div>';
 
   // Radar
+  h+='<div class="card"><p style="font-size:14px;font-weight:700;color:#3d2e33;text-align:center;margin-bottom:8px;">因子分布雷达图</p>';
   h+='<div class="radar-wrap"><canvas id="radar-canvas" width="460" height="460"></canvas></div></div>';
 
   // Factor Cards
-  h+='<div class="card"><h2 style="font-size:15px;color:#3d2e33;margin-bottom:10px;">各因子分析</h2>';
+  h+='<div class="card"><h2 style="font-size:15px;color:#3d2e33;margin-bottom:4px;">各因子分析</h2>';
+  h+='<p style="font-size:11px;color:#b09898;margin-bottom:10px;">评估标准：<span class="fc-badge normal">正常</span>＜2 · <span class="fc-badge mild">轻度</span>2-3 · <span class="fc-badge moderate">中度</span>3-4 · <span class="fc-badge severe">重度</span>≥4</p>';
   h+='<div class="factor-grid">';
   for(var fi=0;fi<fOrder.length;fi++){
     var fn=fOrder[fi], fs=fScores[fn], lv=getLevel(parseFloat(fs.avg));
     var pct=Math.round(parseFloat(fs.avg)/5*100);
-    h+='<div class="factor-card">';
-    h+='<div class="fc-name">'+fn+'</div>';
+    h+='<div class="factor-card"><div class="fc-name">'+fn+'</div>';
     h+='<div class="fc-score-row"><span class="fc-avg">'+fs.avg+'</span><span class="fc-total">'+fs.sum+'/'+(fs.count*5)+'</span></div>';
     h+='<div class="fc-bar-wrap"><div class="fc-bar '+lv.cls+'" style="width:'+pct+'%"></div></div>';
-    h+='<span class="fc-badge '+lv.cls+'">'+lv.text+'</span>';
-    h+='</div>';
+    h+='<span class="fc-badge '+lv.cls+'">'+lv.text+'</span></div>';
   }
   h+='</div></div>';
 
@@ -538,7 +639,6 @@ function submitTest(){
     h+='<tr><td>'+fn+'</td><td>'+fs.count+'</td><td>'+fs.sum+'</td><td>'+fs.avg+'</td><td><span class="fc-badge '+lv.cls+'">'+lv.text+'</span></td></tr>';
   }
   h+='</tbody></table>';
-  h+='<p style="font-size:10px;color:#c8b8b8;margin-top:10px;">常模：均分＜2 正常 · 2-3 轻度 · 3-4 中度 · ≥4 重度</p>';
   h+='<div style="text-align:center;margin-top:16px;"><button class="btn btn-primary" onclick="startTest()">重新测试</button></div>';
   h+='</div>';
 
@@ -547,7 +647,7 @@ function submitTest(){
   document.getElementById("result-content").innerHTML=h;
   document.getElementById("page-result").style.display="block";
   window.scrollTo(0,0);
-  setTimeout(function(){drawRadar(fScores,fOrder);},100);
+  setTimeout(function(){drawRadar(fScores,fOrder);},200);
 }
 
 function drawRadar(fScores,fOrder){
@@ -556,27 +656,14 @@ function drawRadar(fScores,fOrder){
   var isD=window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches;
   var gc=isD?"#3a2830":"#e8d8d4",lc=isD?"#b09098":"#5a3a40",fc=isD?"rgba(184,120,140,0.18)":"rgba(171,112,120,0.12)",lnc=isD?"#c87888":"#ab7078";
   ctx.clearRect(0,0,460,460);
-  for(var lv=1;lv<=levels;lv++){
-    var lr=r*lv/levels;ctx.beginPath();
-    for(var i=0;i<n;i++){var a=Math.PI*2*i/n-Math.PI/2;if(i===0)ctx.moveTo(cx+lr*Math.cos(a),cy+lr*Math.sin(a));else ctx.lineTo(cx+lr*Math.cos(a),cy+lr*Math.sin(a));}
-    ctx.closePath();ctx.strokeStyle=gc;ctx.lineWidth=0.8;ctx.stroke();
-  }
-  for(var i=0;i<n;i++){
-    var a=Math.PI*2*i/n-Math.PI/2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
-    ctx.strokeStyle=gc;ctx.lineWidth=0.6;ctx.stroke();
-  }
-  ctx.fillStyle=lc;ctx.font='12px "PingFang SC","Microsoft YaHei",sans-serif';ctx.textAlign="center";ctx.textBaseline="middle";
-  var ld=r+26;
+  for(var lv=1;lv<=levels;lv++){var lr=r*lv/levels;ctx.beginPath();for(var i=0;i<n;i++){var a=Math.PI*2*i/n-Math.PI/2;if(i===0)ctx.moveTo(cx+lr*Math.cos(a),cy+lr*Math.sin(a));else ctx.lineTo(cx+lr*Math.cos(a),cy+lr*Math.sin(a));}ctx.closePath();ctx.strokeStyle=gc;ctx.lineWidth=0.8;ctx.stroke();}
+  for(var i=0;i<n;i++){var a=Math.PI*2*i/n-Math.PI/2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));ctx.strokeStyle=gc;ctx.lineWidth=0.6;ctx.stroke();}
+  ctx.fillStyle=lc;ctx.font='12px "PingFang SC","Microsoft YaHei",sans-serif';ctx.textAlign="center";ctx.textBaseline="middle";var ld=r+26;
   for(var i=0;i<n;i++){var a=Math.PI*2*i/n-Math.PI/2;ctx.fillText(fOrder[i],cx+ld*Math.cos(a),cy+ld*Math.sin(a));}
   var dvs=[];for(var i=0;i<n;i++)dvs.push(parseFloat(fScores[fOrder[i]].avg));
-  ctx.beginPath();
-  for(var i=0;i<n;i++){var dr=r*dvs[i]/5,a=Math.PI*2*i/n-Math.PI/2;if(i===0)ctx.moveTo(cx+dr*Math.cos(a),cy+dr*Math.sin(a));else ctx.lineTo(cx+dr*Math.cos(a),cy+dr*Math.sin(a));}
+  ctx.beginPath();for(var i=0;i<n;i++){var dr=r*dvs[i]/5,a=Math.PI*2*i/n-Math.PI/2;if(i===0)ctx.moveTo(cx+dr*Math.cos(a),cy+dr*Math.sin(a));else ctx.lineTo(cx+dr*Math.cos(a),cy+dr*Math.sin(a));}
   ctx.closePath();ctx.fillStyle=fc;ctx.fill();ctx.strokeStyle=lnc;ctx.lineWidth=2.2;ctx.stroke();
-  for(var i=0;i<n;i++){
-    var dr=r*dvs[i]/5,a=Math.PI*2*i/n-Math.PI/2;
-    ctx.beginPath();ctx.arc(cx+dr*Math.cos(a),cy+dr*Math.sin(a),4.5,0,Math.PI*2);
-    ctx.fillStyle="#fff";ctx.fill();ctx.strokeStyle=lnc;ctx.lineWidth=2;ctx.stroke();
-  }
+  for(var i=0;i<n;i++){var dr=r*dvs[i]/5,a=Math.PI*2*i/n-Math.PI/2;ctx.beginPath();ctx.arc(cx+dr*Math.cos(a),cy+dr*Math.sin(a),4.5,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();ctx.strokeStyle=lnc;ctx.lineWidth=2;ctx.stroke();}
 }
 </script>
 </body>
