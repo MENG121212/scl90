@@ -65,9 +65,41 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
 <!-- 引导页 -->
 <div id="page-intro" class="card">
   <h2>指导语</h2>
-  <p style="font-size:13px; color:#666;">以下列出了有些人可能会有的问题，请仔细阅读每一条，然后根据最近一周以来的实际感觉，选择最符合您情况的选项。</p>
-  <p style="font-size:12px; color:#999; margin-top:8px;">1 — 没有（无该项症状）<br>2 — 很轻（有症状但轻微）<br>3 — 中等（有症状且有一定影响）<br>4 — 偏重（症状较重）<br>5 — 严重（症状频繁且严重）</p>
-  <div id="intro-start-btn" style="text-align:center; margin-top:18px;">
+  <p style="font-size:13px; color:#666;">以下列出了有些人可能会有的问题，请仔细阅读每一条，然后根据<strong>最近一周</strong>以来的实际感觉，选择最符合您情况的选项。</p>
+  <div style="margin-top:14px; border:1px solid #e0e0e0; border-radius:8px; overflow:hidden;">
+    <div style="display:flex; background:#f5f5f5; font-size:11px; color:#888; text-align:center; border-bottom:1px solid #e0e0e0;">
+      <div style="width:18%; padding:8px 4px;">选项</div>
+      <div style="width:26%; padding:8px 4px;">程度</div>
+      <div style="width:56%; padding:8px 4px;">具体含义</div>
+    </div>
+    <div style="display:flex; font-size:12px; text-align:center; border-bottom:1px solid #f0f0f0;">
+      <div style="width:18%; padding:10px 4px; font-weight:bold; color:#4CAF50;">1</div>
+      <div style="width:26%; padding:10px 4px; color:#4CAF50;">没有</div>
+      <div style="width:56%; padding:10px 4px; text-align:left; color:#666;">最近一周内完全没有该情况</div>
+    </div>
+    <div style="display:flex; font-size:12px; text-align:center; border-bottom:1px solid #f0f0f0;">
+      <div style="width:18%; padding:10px 4px; font-weight:bold; color:#8BC34A;">2</div>
+      <div style="width:26%; padding:10px 4px; color:#8BC34A;">很轻</div>
+      <div style="width:56%; padding:10px 4px; text-align:left; color:#666;">偶尔出现，程度轻微，几乎不影响日常生活</div>
+    </div>
+    <div style="display:flex; font-size:12px; text-align:center; border-bottom:1px solid #f0f0f0;">
+      <div style="width:18%; padding:10px 4px; font-weight:bold; color:#FF9800;">3</div>
+      <div style="width:26%; padding:10px 4px; color:#FF9800;">中等</div>
+      <div style="width:56%; padding:10px 4px; text-align:left; color:#666;">经常出现，有一定影响但不是特别困扰</div>
+    </div>
+    <div style="display:flex; font-size:12px; text-align:center; border-bottom:1px solid #f0f0f0;">
+      <div style="width:18%; padding:10px 4px; font-weight:bold; color:#F44336;">4</div>
+      <div style="width:26%; padding:10px 4px; color:#F44336;">偏重</div>
+      <div style="width:56%; padding:10px 4px; text-align:left; color:#666;">频繁出现，程度较重，对生活有明显影响</div>
+    </div>
+    <div style="display:flex; font-size:12px; text-align:center;">
+      <div style="width:18%; padding:10px 4px; font-weight:bold; color:#D32F2F;">5</div>
+      <div style="width:26%; padding:10px 4px; color:#D32F2F;">严重</div>
+      <div style="width:56%; padding:10px 4px; text-align:left; color:#666;">几乎持续存在，程度非常严重，严重干扰日常生活</div>
+    </div>
+  </div>
+  <p style="font-size:11px; color:#bbb; margin-top:10px; text-align:center;">请根据真实感受作答，测试结果仅作参考，不构成医疗诊断</p>
+  <div id="intro-start-btn" style="text-align:center; margin-top:12px;">
     <button class="btn btn-primary" onclick="startTest()">开始测试</button>
   </div>
 </div>
