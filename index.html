@@ -786,6 +786,16 @@ function drawRadar(factorScores, factorNamesOrder) {
   var cx = 250, cy = 250, r = 200;
   var levels = 5;
 
+  // 检测深色模式
+  var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  var gridColor = isDark ? '#555' : '#bbb';
+  var axisColor = isDark ? '#444' : '#ddd';
+  var labelColor = isDark ? '#ccc' : '#444';
+  var fillColor = isDark ? 'rgba(74,144,217,0.22)' : 'rgba(80,80,80,0.13)';
+  var lineColor = isDark ? '#4a90d9' : '#444';
+  var dotColor = isDark ? '#4a90d9' : '#222';
+
   // 清除画布
   ctx.clearRect(0, 0, 500, 500);
 
@@ -801,7 +811,7 @@ function drawRadar(factorScores, factorNamesOrder) {
       else ctx.lineTo(x, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = '#bbb';
+    ctx.strokeStyle = gridColor;
     ctx.lineWidth = 0.8;
     ctx.stroke();
   }
@@ -814,13 +824,13 @@ function drawRadar(factorScores, factorNamesOrder) {
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(x, y);
-    ctx.strokeStyle = '#ddd';
+    ctx.strokeStyle = axisColor;
     ctx.lineWidth = 0.6;
     ctx.stroke();
   }
 
   // ---- 因子标签 ----
-  ctx.fillStyle = '#444';
+  ctx.fillStyle = labelColor;
   ctx.font = '13px "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -850,9 +860,9 @@ function drawRadar(factorScores, factorNamesOrder) {
     else ctx.lineTo(dx, dy);
   }
   ctx.closePath();
-  ctx.fillStyle = 'rgba(80,80,80,0.13)';
+  ctx.fillStyle = fillColor;
   ctx.fill();
-  ctx.strokeStyle = '#444';
+  ctx.strokeStyle = lineColor;
   ctx.lineWidth = 2;
   ctx.stroke();
 
@@ -865,7 +875,7 @@ function drawRadar(factorScores, factorNamesOrder) {
     var dy = cy + dr * Math.sin(angle);
     ctx.beginPath();
     ctx.arc(dx, dy, 4, 0, Math.PI * 2);
-    ctx.fillStyle = '#222';
+    ctx.fillStyle = dotColor;
     ctx.fill();
   }
 }
