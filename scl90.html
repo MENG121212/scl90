@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>SCL-90 症状自评量表</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", -apple-system, sans-serif;
+  background: #fdf7f2;
+  color: #3d2e33;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.container { max-width: 680px; margin: 0 auto; padding: 0 0 16px; }
+
+/* ===== Hero Header ===== */
+.hero {
+  background: linear-gradient(165deg, #eed5d0 0%, #ddb8b8 30%, #c49498 60%, #ab7078 100%);
+  padding: 44px 24px 36px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -60px; right: -40px;
+  width: 180px; height: 180px; border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+}
+.hero::after {
+  content: ''; position: absolute; bottom: -30px; left: -30px;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.hero-badge {
+  display: inline-block; background: rgba(255,255,255,0.22);
+  color: #fff; font-size: 11px; font-weight: 600; letter-spacing: 2px;
+  padding: 4px 16px; border-radius: 20px; margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.hero h1 { font-size: 28px; font-weight: 700; color: #fff; letter-spacing: 2px; margin-bottom: 6px; position: relative; z-index: 1; }
+.hero .hero-sub { font-size: 13px; color: rgba(255,255,255,0.78); font-weight: 400; position: relative; z-index: 1; }
+
+/* ===== Progress Steps ===== */
+.progress-steps {
+  display: flex; justify-content: center; gap: 6px;
+  padding: 18px 16px 10px; background: #fff;
+  margin: 0 16px; border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(160,120,120,0.06);
+  position: relative; top: -18px;
+}
+.step-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #f0e8e4; font-size: 11px; font-weight: 700;
+  color: #b8a0a0; display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0;
+  cursor: pointer;
+}
+.step-dot.done { background: #c89498; color: #fff; }
+.step-dot.current { background: #ab7078; color: #fff; transform: scale(1.15); box-shadow: 0 2px 10px rgba(171,112,120,0.35); }
+.progress-text-row { text-align: center; font-size: 11px; color: #b8a0a0; font-weight: 500; padding-bottom: 8px; }
+
+/* ===== Cards ===== */
+.card {
+  background: #fff; border-radius: 18px; padding: 24px 20px;
+  margin: 0 16px 16px; box-shadow: 0 2px 18px rgba(160,120,120,0.06);
+}
+
+/* ===== Intro ===== */
+.intro-guide {
+  display: flex; flex-direction: column; gap: 1px;
+  background: #f5ece8; border-radius: 14px; overflow: hidden; margin: 14px 0;
+}
+.intro-guide .g-row {
+  display: flex; background: #fff; font-size: 12px; align-items: center;
+}
+.intro-guide .g-row.header-row { background: #fdf7f5; font-weight: 600; color: #6a4a50; font-size: 11px; }
+.intro-guide .g-num { width: 36px; text-align: center; font-weight: 700; font-size: 16px; flex-shrink: 0; }
+.intro-guide .g-label { width: 52px; font-weight: 600; flex-shrink: 0; }
+.intro-guide .g-desc { flex: 1; padding: 10px 8px 10px 0; color: #7a6a70; }
+.intro-guide .g-row:nth-child(2) .g-num { color: #999; }
+.intro-guide .g-row:nth-child(3) .g-num { color: #7ba87b; }
+.intro-guide .g-row:nth-child(4) .g-num { color: #d4943a; }
+.intro-guide .g-row:nth-child(5) .g-num { color: #c46040; }
+.intro-guide .g-row:nth-child(6) .g-num { color: #b84040; }
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-block; padding: 12px 36px; border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 600; cursor: pointer; outline: none;
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  letter-spacing: 0.5px; -webkit-tap-highlight-color: transparent;
+}
+.btn-primary {
+  background: #ab7078; color: #fff; box-shadow: 0 3px 14px rgba(171,112,120,0.28);
+  font-size: 16px; padding: 14px 52px; width: 100%; max-width: 300px;
+}
+.btn-primary:hover { background: #9a6068; transform: translateY(-1px); box-shadow: 0 5px 20px rgba(171,112,120,0.38); }
+.btn-primary:active { transform: translateY(0); background: #8a5058; }
+.btn-secondary {
+  background: #fff; color: #7a5a60; border: 1.5px solid #e8d8d4; padding: 11px 30px; font-size: 14px;
+}
+.btn-secondary:hover { border-color: #ab7078; color: #ab7078; background: #fdf7f5; }
+.btn-secondary:disabled { background: #f8f0ee; color: #d0c0c0; border-color: #f0e4e0; cursor: not-allowed; }
+
+/* ===== Quiz ===== */
+.quiz-list {}
+.q-card {
+  background: #fff; border-radius: 16px; padding: 18px 18px 14px;
+  margin-bottom: 12px; box-shadow: 0 1px 8px rgba(160,120,120,0.04);
+  transition: box-shadow 0.2s;
+}
+.q-card:hover { box-shadow: 0 2px 14px rgba(160,120,120,0.08); }
+.q-num { font-size: 10px; color: #c8a8a8; font-weight: 600; margin-bottom: 6px; letter-spacing: 0.5px; }
+.q-text { font-size: 14px; font-weight: 500; color: #3d2e33; margin-bottom: 12px; line-height: 1.5; }
+.opt-row { display: flex; gap: 6px; }
+.opt-chip {
+  flex: 1; padding: 8px 4px; border-radius: 10px; text-align: center;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  border: 1.5px solid #e8d8d4; background: #fdfaf8; color: #a09090;
+  transition: all 0.18s cubic-bezier(0.4,0,0.2,1); outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.opt-chip:hover { border-color: #d0b8b8; color: #6a5050; }
+.opt-chip[data-v="1"].selected { background: #f0f0f0; border-color: #c0c0c0; color: #666; }
+.opt-chip[data-v="2"].selected { background: #e6f0e6; border-color: #8cb88c; color: #3d6e3d; }
+.opt-chip[data-v="3"].selected { background: #fdf0e0; border-color: #d4a060; color: #8a5a20; }
+.opt-chip[data-v="4"].selected { background: #fce4dc; border-color: #c47050; color: #8a3020; }
+.opt-chip[data-v="5"].selected { background: #fce0e0; border-color: #c05050; color: #8a2020; }
+
+/* ===== Page Nav ===== */
+.page-nav { display: flex; justify-content: space-between; align-items: center; margin: 6px 16px 12px; }
+.page-nav .page-label { font-size: 13px; color: #b09898; font-weight: 500; }
+
+/* ===== Submit Page ===== */
+.submit-card { text-align: center; }
+.submit-card .check-icon { font-size: 48px; margin: 8px 0; display: block; }
+.submit-hint { font-size: 12px; color: #c46040; margin: 8px 0; display: none; background: #fef5f0; padding: 8px 14px; border-radius: 10px; }
+
+/* ===== Results ===== */
+.result-hero {
+  background: linear-gradient(165deg, #eed5d0 0%, #c49498 100%);
+  padding: 32px 24px; text-align: center;
+}
+.result-hero .rh-label { font-size: 11px; color: rgba(255,255,255,0.75); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+.result-hero .rh-title { font-size: 18px; font-weight: 700; color: #fff; letter-spacing: 1px; }
+
+.summary-row { display: flex; gap: 10px; margin: -20px 16px 16px; position: relative; z-index: 1; }
+.summary-card {
+  flex: 1; background: #fff; border-radius: 16px; padding: 18px 10px; text-align: center;
+  box-shadow: 0 3px 18px rgba(160,120,120,0.10);
+}
+.summary-card .s-val { font-size: 26px; font-weight: 700; color: #ab7078; margin-bottom: 2px; transition: all 0.6s; }
+.summary-card .s-label { font-size: 11px; color: #b09898; font-weight: 500; }
+
+.overall-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 18px; border-radius: 20px; font-size: 13px; font-weight: 700;
+}
+.badge-normal { background: #e8f0e8; color: #3d6e3d; }
+.badge-mild { background: #fef0e0; color: #8a5a20; }
+.badge-moderate { background: #fce8e0; color: #8a3020; }
+.badge-severe { background: #fce0e8; color: #7a1a3a; }
+
+/* Factor Cards Grid */
+.factor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.factor-card {
+  background: #fff; border-radius: 14px; padding: 16px 14px;
+  box-shadow: 0 2px 10px rgba(160,120,120,0.05);
+  transition: box-shadow 0.2s;
+}
+.factor-card:hover { box-shadow: 0 4px 16px rgba(160,120,120,0.12); }
+.fc-name { font-size: 13px; font-weight: 600; color: #3d2e33; margin-bottom: 8px; }
+.fc-score-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.fc-avg { font-size: 22px; font-weight: 700; color: #ab7078; }
+.fc-total { font-size: 11px; color: #b09898; }
+.fc-bar-wrap { height: 6px; background: #f0e8e4; border-radius: 6px; overflow: hidden; margin-bottom: 6px; }
+.fc-bar {
+  height: 100%; border-radius: 6px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+.fc-bar.normal { background: #a0c8a0; }
+.fc-bar.mild { background: #e0c080; }
+.fc-bar.moderate { background: #d87860; }
+.fc-bar.severe { background: #c84040; }
+.fc-badge { font-size: 10px; font-weight: 700; display: inline-block; padding: 2px 10px; border-radius: 8px; }
+.fc-badge.normal { background: #e8f0e8; color: #3d6e3d; }
+.fc-badge.mild { background: #fef0e0; color: #8a5a20; }
+.fc-badge.moderate { background: #fce8e0; color: #8a3020; }
+.fc-badge.severe { background: #fce0e8; color: #7a1a3a; }
+
+/* Radar */
+.radar-wrap { display: flex; justify-content: center; padding: 8px 0; }
+.radar-wrap canvas { max-width: 100%; height: auto; }
+
+/* Detail Table */
+.detail-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 6px rgba(160,120,120,0.04); }
+.detail-table th {
+  background: #fdf7f5; font-weight: 600; color: #5a3a40; font-size: 11px;
+  padding: 10px 8px; text-align: left; border-bottom: 1.5px solid #f0e4e0;
+}
+.detail-table td { padding: 9px 8px; font-size: 11px; color: #5a4a50; border-bottom: 1px solid #faf2f0; }
+
+/* Footer */
+.footer { text-align: center; padding: 24px 16px 20px; }
+.footer p { font-size: 10px; color: #c8b8b8; margin-bottom: 3px; }
+
+/* ===== Animations ===== */
+@keyframes countUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.anim-in { animation: countUp 0.5s cubic-bezier(0.4,0,0.2,1) both; }
+
+/* ===== Responsive ===== */
+@media (max-width: 500px) {
+  .hero { padding: 32px 18px 28px; }
+  .hero h1 { font-size: 23px; }
+  .step-dot { width: 24px; height: 24px; font-size: 10px; }
+  .progress-steps { gap: 4px; padding: 14px 10px 8px; }
+  .factor-grid { grid-template-columns: 1fr; }
+  .card { padding: 18px 14px; margin: 0 10px 12px; }
+  .summary-row { margin: -16px 10px 12px; }
+}
+
+/* ===== Dark Mode ===== */
+@media (prefers-color-scheme: dark) {
+  body { background: #1a1214; color: #c8b0b8; }
+  .hero { background: linear-gradient(165deg, #3a2028 0%, #2a1820 60%, #1a1014 100%); }
+  .progress-steps { background: #241820; box-shadow: 0 2px 16px rgba(0,0,0,0.3); }
+  .step-dot { background: #3a2830; color: #806870; }
+  .step-dot.done { background: #8a5868; color: #fff; }
+  .step-dot.current { background: #b87080; box-shadow: 0 2px 10px rgba(184,112,128,0.4); }
+  .card { background: #241820; box-shadow: 0 2px 18px rgba(0,0,0,0.25); }
+  .intro-guide { background: #3a2830; }
+  .intro-guide .g-row { background: #241820; }
+  .intro-guide .g-row.header-row { background: #2a1e26; color: #d0b8c0; }
+  .intro-guide .g-desc { color: #b0a0a8; }
+  .btn-secondary { background: #241820; color: #c8b0b8; border-color: #3a2830; }
+  .btn-secondary:hover { border-color: #b87080; color: #b87080; background: #2a1e26; }
+  .q-card { background: #241820; box-shadow: 0 1px 8px rgba(0,0,0,0.2); }
+  .q-text { color: #d8c8d0; }
+  .opt-chip { background: #241820; border-color: #3a2830; color: #907888; }
+  .opt-chip:hover { border-color: #5a3a48; color: #c0a8b0; }
+  .opt-chip[data-v="1"].selected { background: #282828; border-color: #505050; color: #999; }
+  .opt-chip[data-v="2"].selected { background: #1e2e1e; border-color: #4a7a4a; color: #6aaa6a; }
+  .opt-chip[data-v="3"].selected { background: #2e2418; border-color: #8a6030; color: #c09040; }
+  .opt-chip[data-v="4"].selected { background: #2e1e18; border-color: #8a4830; color: #c87050; }
+  .opt-chip[data-v="5"].selected { background: #2e1818; border-color: #8a3030; color: #c85050; }
+  .summary-card { background: #241820; box-shadow: 0 3px 18px rgba(0,0,0,0.3); }
+  .summary-card .s-val { color: #d08090; }
+  .factor-card { background: #241820; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+  .fc-name { color: #d8c8d0; }
+  .fc-avg { color: #d08090; }
+  .fc-bar-wrap { background: #3a2830; }
+  .fc-badge.normal { background: #1e2e1e; color: #6aaa6a; }
+  .fc-badge.mild { background: #2e2418; color: #c09040; }
+  .fc-badge.moderate { background: #2e1e18; color: #c87050; }
+  .fc-badge.severe { background: #2e1818; color: #c85050; }
+  .detail-table th { background: #2a1e26; color: #c8b0b8; border-bottom-color: #3a2830; }
+  .detail-table td { color: #b0a0a8; border-bottom-color: #2a1e26; }
+  .footer p { color: #6a5060; }
+  .page-nav .page-label { color: #907888; }
+  .progress-text-row { color: #907888; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-badge">PSYCHOLOGICAL ASSESSMENT</div>
+  <h1>SCL-90</h1>
+  <p class="hero-sub">症状自评量表 · 90 题 · 约 10 分钟</p>
+</div>
+
+<!-- Intro Page -->
+<div id="page-intro">
+  <div class="card">
+    <h2 style="font-size:16px;color:#3d2e33;margin-bottom:4px;">指导语</h2>
+    <p style="font-size:13px;color:#7a6a70;">请根据<strong style="color:#ab7078;">最近一周</strong>的实际感觉，选择最符合的选项。</p>
+    <div class="intro-guide">
+      <div class="g-row header-row">
+        <div class="g-num">分</div><div class="g-label">程度</div><div class="g-desc">说明</div>
+      </div>
+      <div class="g-row"><div class="g-num">1</div><div class="g-label">没有</div><div class="g-desc">最近一周内完全没有该情况</div></div>
+      <div class="g-row"><div class="g-num">2</div><div class="g-label">很轻</div><div class="g-desc">偶尔出现，程度轻微</div></div>
+      <div class="g-row"><div class="g-num">3</div><div class="g-label">中等</div><div class="g-desc">经常出现，有一定影响</div></div>
+      <div class="g-row"><div class="g-num">4</div><div class="g-label">偏重</div><div class="g-desc">频繁出现，对生活有明显影响</div></div>
+      <div class="g-row"><div class="g-num">5</div><div class="g-label">严重</div><div class="g-desc">几乎持续存在，严重干扰日常生活</div></div>
+    </div>
+    <p style="font-size:10px;color:#c8b8b8;text-align:center;margin-top:8px;">凭真实感受作答，结果仅供参考，不构成医疗诊断</p>
+  </div>
+  <div style="text-align:center;padding:8px 16px 24px;">
+    <button class="btn btn-primary" onclick="startTest()">开始测试</button>
+  </div>
+</div>
+
+<!-- Quiz Page -->
+<div id="page-quiz" style="display:none;">
+  <div class="progress-steps" id="progress-steps"></div>
+  <p class="progress-text-row" id="progress-text">0 / 90</p>
+  <div class="quiz-list" id="quiz-list"></div>
+  <div class="page-nav">
+    <button class="btn btn-secondary" id="btn-prev" onclick="prevPage()" style="visibility:hidden;">上一页</button>
+    <span class="page-label" id="page-label">第 1/9 页</span>
+    <button class="btn btn-secondary" id="btn-next" onclick="nextPage()">下一页</button>
+  </div>
+</div>
+
+<!-- Submit Page -->
+<div id="page-submit" style="display:none;">
+  <div class="card submit-card">
+    <span class="check-icon">📋</span>
+    <h2 style="font-size:17px;color:#3d2e33;margin-bottom:4px;">确认提交</h2>
+    <p style="font-size:13px;color:#7a6a70;">您已完成全部 90 道题目</p>
+    <p class="submit-hint" id="submit-hint"></p>
+    <div style="margin-top:14px;display:flex;gap:10px;justify-content:center;">
+      <button class="btn btn-secondary" onclick="goBack()">返回修改</button>
+      <button class="btn btn-primary" style="max-width:160px;padding:11px 28px;font-size:14px;" onclick="submitTest()">提交答案</button>
+    </div>
+  </div>
+</div>
+
+<!-- Result Page -->
+<div id="page-result" style="display:none;">
+  <div id="result-content"></div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>SCL-90（Symptom Checklist 90）由 L.R. Derogatis 于 1975 年编制</p>
+  <p>本测试仅为心理健康自评工具，不构成临床诊断</p>
+</div>
+
+</div>
+
+<script>
+var questions = [
+  {id:1,f:"躯体化",t:"头痛"},{id:2,f:"躯体化",t:"神经过敏，心中不踏实"},
+  {id:3,f:"强迫症状",t:"头脑中有不必要的想法或字句盘旋"},{id:4,f:"躯体化",t:"头晕或晕倒"},
+  {id:5,f:"其他",t:"对异性的兴趣减退"},{id:6,f:"敌对",t:"对旁人责备求全"},
+  {id:7,f:"躯体化",t:"感到别人能控制您的思想"},{id:8,f:"其他",t:"责怪别人制造麻烦"},
+  {id:9,f:"强迫症状",t:"忘性大"},{id:10,f:"强迫症状",t:"担心自己的衣饰整齐及仪态的端正"},
+  {id:11,f:"敌对",t:"容易烦恼和激动"},{id:12,f:"躯体化",t:"胸痛"},
+  {id:13,f:"恐怖",t:"害怕空旷的场所或街道"},{id:14,f:"躯体化",t:"感到自己的精力下降，活动减慢"},
+  {id:15,f:"其他",t:"想结束自己的生命"},{id:16,f:"其他",t:"听到旁人听不到的声音"},
+  {id:17,f:"躯体化",t:"发抖"},{id:18,f:"人际敏感",t:"感到大多数人都不可信任"},
+  {id:19,f:"其他",t:"胃口不好"},{id:20,f:"抑郁",t:"容易哭泣"},
+  {id:21,f:"人际敏感",t:"同异性相处时感到害羞不自在"},{id:22,f:"人际敏感",t:"感到受骗、中了圈套或有人想抓住您"},
+  {id:23,f:"恐怖",t:"无缘无故地突然感到害怕"},{id:24,f:"敌对",t:"自己不能控制地大发脾气"},
+  {id:25,f:"恐怖",t:"怕单独出门"},{id:26,f:"抑郁",t:"经常责怪自己"},
+  {id:27,f:"躯体化",t:"腰痛"},{id:28,f:"强迫症状",t:"感到难以完成任务"},
+  {id:29,f:"抑郁",t:"感到孤独"},{id:30,f:"抑郁",t:"感到苦闷"},
+  {id:31,f:"焦虑",t:"过分担忧"},{id:32,f:"抑郁",t:"对事物不感兴趣"},
+  {id:33,f:"恐怖",t:"感到害怕"},{id:34,f:"人际敏感",t:"您的感情容易受到伤害"},
+  {id:35,f:"人际敏感",t:"旁人能知道您的私下想法"},{id:36,f:"人际敏感",t:"感到别人不理解您、不同情您"},
+  {id:37,f:"人际敏感",t:"感到人们对您不友好、不喜欢您"},{id:38,f:"强迫症状",t:"做事必须做得很慢以保证做得正确"},
+  {id:39,f:"焦虑",t:"心跳得很厉害"},{id:40,f:"躯体化",t:"恶心或胃部不舒服"},
+  {id:41,f:"人际敏感",t:"感到比不上他人"},{id:42,f:"躯体化",t:"肌肉酸痛"},
+  {id:43,f:"人际敏感",t:"感到有人在监视您、谈论您"},{id:44,f:"其他",t:"难以入睡"},
+  {id:45,f:"强迫症状",t:"做事必须反复检查"},{id:46,f:"强迫症状",t:"难以做出决定"},
+  {id:47,f:"恐怖",t:"怕乘电车、公共汽车、地铁或火车"},{id:48,f:"躯体化",t:"呼吸有困难"},
+  {id:49,f:"躯体化",t:"一阵阵发冷或发热"},{id:50,f:"恐怖",t:"因为感到害怕而避开某些东西、场合或活动"},
+  {id:51,f:"强迫症状",t:"脑子变空了"},{id:52,f:"躯体化",t:"身体发麻或刺痛"},
+  {id:53,f:"躯体化",t:"喉咙有梗塞感"},{id:54,f:"抑郁",t:"感到前途没有希望"},
+  {id:55,f:"强迫症状",t:"不能集中注意力"},{id:56,f:"躯体化",t:"感到身体的某一部分软弱无力"},
+  {id:57,f:"焦虑",t:"感到紧张或容易紧张"},{id:58,f:"躯体化",t:"感到手或脚发重"},
+  {id:59,f:"其他",t:"想到死亡的事"},{id:60,f:"其他",t:"吃得太多"},
+  {id:61,f:"人际敏感",t:"当别人看着您或谈论您时感到不自在"},{id:62,f:"其他",t:"有一些不属于您自己的想法"},
+  {id:63,f:"敌对",t:"有想打人或伤害他人的冲动"},{id:64,f:"其他",t:"醒得太早"},
+  {id:65,f:"强迫症状",t:"必须反复洗手、点数目或触摸某些东西"},{id:66,f:"其他",t:"睡得不稳不深"},
+  {id:67,f:"敌对",t:"有想摔坏或破坏东西的冲动"},{id:68,f:"其他",t:"有一些别人没有的想法或念头"},
+  {id:69,f:"人际敏感",t:"感到对别人神经过敏"},{id:70,f:"人际敏感",t:"在商店或电影院等人多的地方感到不自在"},
+  {id:71,f:"抑郁",t:"感到任何事情都很困难"},{id:72,f:"焦虑",t:"一阵阵恐惧或惊恐"},
+  {id:73,f:"人际敏感",t:"感到在公共场合吃东西很不舒服"},{id:74,f:"敌对",t:"经常与人争论"},
+  {id:75,f:"恐怖",t:"单独一人时神经很紧张"},{id:76,f:"人际敏感",t:"别人对您的成绩没有作出恰当的评价"},
+  {id:77,f:"人际敏感",t:"即使和别人在一起也感到孤单"},{id:78,f:"焦虑",t:"感到坐立不安心神不定"},
+  {id:79,f:"抑郁",t:"感到自己没有什么价值"},{id:80,f:"焦虑",t:"感到熟悉的东西变得陌生或不像是真的"},
+  {id:81,f:"敌对",t:"大叫或摔东西"},{id:82,f:"恐怖",t:"害怕会在公共场合晕倒"},
+  {id:83,f:"人际敏感",t:"感到别人想占您的便宜"},{id:84,f:"其他",t:"为一些有关性的想法而很苦恼"},
+  {id:85,f:"其他",t:"您认为应该因为自己的过错而受到惩罚"},{id:86,f:"焦虑",t:"感到要赶快把事情做完"},
+  {id:87,f:"躯体化",t:"感到自己的身体有严重问题"},{id:88,f:"其他",t:"从未感到和其他人很亲近"},
+  {id:89,f:"抑郁",t:"感到自己有罪"},{id:90,f:"精神病性",t:"感到自己的脑子有毛病"}
+];
+
+var TOTAL=90, PER_PAGE=10, TOTAL_PAGES=9, currentPage=0, answers={};
+
+function startTest(){
+  currentPage=0; answers={};
+  document.getElementById("page-intro").style.display="none";
+  document.getElementById("page-submit").style.display="none";
+  document.getElementById("page-result").style.display="none";
+  document.getElementById("page-quiz").style.display="block";
+  buildSteps(); renderPage(0); window.scrollTo(0,0);
+}
+
+function buildSteps(){
+  var h='';
+  for(var i=0;i<TOTAL_PAGES;i++) h+='<div class="step-dot" id="step'+i+'">'+(i+1)+'</div>';
+  document.getElementById("progress-steps").innerHTML=h;
+}
+
+function getScoreClass(v){
+  if(v===1)return "normal"; if(v===2)return "mild";
+  if(v===3)return "mild"; if(v===4)return "moderate"; return "severe";
+}
+
+function selectOpt(qid,val,el){
+  answers[qid]=val;
+  var row=el.parentNode;
+  for(var i=0;i<row.children.length;i++) row.children[i].className="opt-chip";
+  el.className="opt-chip selected";
+}
+
+function renderPage(page){
+  currentPage=page;
+  var start=page*PER_PAGE, end=Math.min(start+PER_PAGE,TOTAL), html="";
+  for(var i=start;i<end;i++){
+    var q=questions[i], val=answers[q.id]||0;
+    html+='<div class="q-card">';
+    html+='<div class="q-num">#'+q.id+'</div>';
+    html+='<div class="q-text">'+q.t+'</div>';
+    html+='<div class="opt-row">';
+    for(var v=1;v<=5;v++){
+      var cls="opt-chip"+(val===v?" selected":"");
+      html+='<button class="'+cls+'" data-v="'+v+'" onclick="selectOpt('+q.id+','+v+',this)">'+v+'</button>';
+    }
+    html+='</div></div>';
+  }
+  document.getElementById("quiz-list").innerHTML=html;
+  var answered=0; for(var k in answers){if(answers.hasOwnProperty(k)&&answers[k]>0)answered++;}
+  document.getElementById("progress-text").textContent=answered+" / "+TOTAL;
+  document.getElementById("page-label").textContent="第 "+(page+1)+"/"+TOTAL_PAGES+" 页";
+  for(var i=0;i<TOTAL_PAGES;i++){
+    var d=document.getElementById("step"+i);
+    if(!d)continue;
+    d.className="step-dot";
+    if(i<page)d.className+=" done";
+    if(i===page)d.className+=" current";
+  }
+  var bp=document.getElementById("btn-prev");
+  bp.style.visibility=page===0?"hidden":"visible"; bp.disabled=page===0;
+  document.getElementById("btn-next").textContent=page===TOTAL_PAGES-1?"完成答题":"下一页";
+  window.scrollTo(0,100);
+}
+
+function nextPage(){
+  if(currentPage<TOTAL_PAGES-1){renderPage(currentPage+1);}
+  else{
+    var unanswered=[];
+    for(var i=0;i<TOTAL;i++){if(!answers[questions[i].id]||answers[questions[i].id]===0)unanswered.push(questions[i].id);}
+    document.getElementById("page-quiz").style.display="none";
+    document.getElementById("page-submit").style.display="block";
+    var hint=document.getElementById("submit-hint");
+    if(unanswered.length>0){hint.style.display="block";hint.textContent="还有 "+unanswered.length+" 题未作答，可返回补充或直接提交";}
+    else{hint.style.display="none";}
+    window.scrollTo(0,0);
+  }
+}
+
+function prevPage(){if(currentPage>0)renderPage(currentPage-1);}
+
+function goBack(){
+  document.getElementById("page-submit").style.display="none";
+  document.getElementById("page-quiz").style.display="block";
+  renderPage(TOTAL_PAGES-1);
+}
+
+function getLevel(avg){
+  if(avg<2)return{text:"正常",cls:"normal"};
+  if(avg<3)return{text:"轻度",cls:"mild"};
+  if(avg<4)return{text:"中度",cls:"moderate"};
+  return{text:"重度",cls:"severe"};
+}
+
+function submitTest(){
+  var scores=[];
+  for(var i=0;i<TOTAL;i++){var q=questions[i];scores.push(answers[q.id]||1);}
+  var factorMap={
+    "躯体化":[1,4,12,27,40,42,48,49,52,53,56,58],
+    "强迫症状":[3,9,10,28,38,45,46,51,55,65],
+    "人际敏感":[6,21,34,36,37,41,61,69,73],
+    "抑郁":[5,14,15,20,22,26,29,30,31,32,54,71,79],
+    "焦虑":[2,17,23,33,39,57,72,78,80,86],
+    "敌对":[11,24,63,67,74,81],
+    "恐怖":[13,25,47,50,70,75,82],
+    "偏执":[8,18,43,68,76,83],
+    "精神病性":[7,16,35,62,77,84,85,87,88,90],
+    "其他":[19,44,59,60,64,66,89]
+  };
+  var totalScore=0; for(var i=0;i<TOTAL;i++)totalScore+=scores[i];
+  var avgScore=(totalScore/TOTAL).toFixed(2);
+  var posCount=0; for(var i=0;i<TOTAL;i++){if(scores[i]>=2)posCount++;}
+  var overallLevel=getLevel(parseFloat(avgScore));
+  var fOrder=["躯体化","强迫症状","人际敏感","抑郁","焦虑","敌对","恐怖","偏执","精神病性","其他"];
+  var fScores={};
+  for(var fi=0;fi<fOrder.length;fi++){
+    var fn=fOrder[fi], ids=factorMap[fn], sum=0;
+    for(var j=0;j<ids.length;j++)sum+=scores[ids[j]-1];
+    fScores[fn]={sum:sum,count:ids.length,avg:(sum/ids.length).toFixed(2)};
+  }
+
+  var h='';
+  h+='<div class="result-hero"><div class="rh-label">ASSESSMENT RESULT</div><div class="rh-title">SCL-90 测评报告</div></div>';
+  h+='<div class="summary-row">';
+  h+='<div class="summary-card"><div class="s-val anim-in">'+totalScore+'</div><div class="s-label">总分</div></div>';
+  h+='<div class="summary-card"><div class="s-val anim-in">'+avgScore+'</div><div class="s-label">总均分</div></div>';
+  h+='<div class="summary-card"><div class="s-val anim-in">'+posCount+'</div><div class="s-label">阳性项目</div></div>';
+  h+='</div>';
+  h+='<div class="card"><p style="text-align:center;font-size:13px;">综合评级：<span class="overall-badge badge-'+overallLevel.cls+'">'+overallLevel.text+'</span></p>';
+
+  // Radar
+  h+='<div class="radar-wrap"><canvas id="radar-canvas" width="460" height="460"></canvas></div></div>';
+
+  // Factor Cards
+  h+='<div class="card"><h2 style="font-size:15px;color:#3d2e33;margin-bottom:10px;">各因子分析</h2>';
+  h+='<div class="factor-grid">';
+  for(var fi=0;fi<fOrder.length;fi++){
+    var fn=fOrder[fi], fs=fScores[fn], lv=getLevel(parseFloat(fs.avg));
+    var pct=Math.round(parseFloat(fs.avg)/5*100);
+    h+='<div class="factor-card">';
+    h+='<div class="fc-name">'+fn+'</div>';
+    h+='<div class="fc-score-row"><span class="fc-avg">'+fs.avg+'</span><span class="fc-total">'+fs.sum+'/'+(fs.count*5)+'</span></div>';
+    h+='<div class="fc-bar-wrap"><div class="fc-bar '+lv.cls+'" style="width:'+pct+'%"></div></div>';
+    h+='<span class="fc-badge '+lv.cls+'">'+lv.text+'</span>';
+    h+='</div>';
+  }
+  h+='</div></div>';
+
+  // Detail Table
+  h+='<div class="card"><h2 style="font-size:15px;color:#3d2e33;margin-bottom:10px;">详细数据</h2>';
+  h+='<table class="detail-table"><thead><tr><th>因子</th><th>题数</th><th>总分</th><th>均分</th><th>评级</th></tr></thead><tbody>';
+  for(var fi=0;fi<fOrder.length;fi++){
+    var fn=fOrder[fi], fs=fScores[fn], lv=getLevel(parseFloat(fs.avg));
+    h+='<tr><td>'+fn+'</td><td>'+fs.count+'</td><td>'+fs.sum+'</td><td>'+fs.avg+'</td><td><span class="fc-badge '+lv.cls+'">'+lv.text+'</span></td></tr>';
+  }
+  h+='</tbody></table>';
+  h+='<p style="font-size:10px;color:#c8b8b8;margin-top:10px;">常模：均分＜2 正常 · 2-3 轻度 · 3-4 中度 · ≥4 重度</p>';
+  h+='<div style="text-align:center;margin-top:16px;"><button class="btn btn-primary" onclick="startTest()">重新测试</button></div>';
+  h+='</div>';
+
+  document.getElementById("page-submit").style.display="none";
+  document.getElementById("page-quiz").style.display="none";
+  document.getElementById("result-content").innerHTML=h;
+  document.getElementById("page-result").style.display="block";
+  window.scrollTo(0,0);
+  setTimeout(function(){drawRadar(fScores,fOrder);},100);
+}
+
+function drawRadar(fScores,fOrder){
+  var c=document.getElementById("radar-canvas");if(!c)return;
+  var ctx=c.getContext("2d"),n=10,cx=230,cy=230,r=195,levels=5;
+  var isD=window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches;
+  var gc=isD?"#3a2830":"#e8d8d4",lc=isD?"#b09098":"#5a3a40",fc=isD?"rgba(184,120,140,0.18)":"rgba(171,112,120,0.12)",lnc=isD?"#c87888":"#ab7078";
+  ctx.clearRect(0,0,460,460);
+  for(var lv=1;lv<=levels;lv++){
+    var lr=r*lv/levels;ctx.beginPath();
+    for(var i=0;i<n;i++){var a=Math.PI*2*i/n-Math.PI/2;if(i===0)ctx.moveTo(cx+lr*Math.cos(a),cy+lr*Math.sin(a));else ctx.lineTo(cx+lr*Math.cos(a),cy+lr*Math.sin(a));}
+    ctx.closePath();ctx.strokeStyle=gc;ctx.lineWidth=0.8;ctx.stroke();
+  }
+  for(var i=0;i<n;i++){
+    var a=Math.PI*2*i/n-Math.PI/2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
+    ctx.strokeStyle=gc;ctx.lineWidth=0.6;ctx.stroke();
+  }
+  ctx.fillStyle=lc;ctx.font='12px "PingFang SC","Microsoft YaHei",sans-serif';ctx.textAlign="center";ctx.textBaseline="middle";
+  var ld=r+26;
+  for(var i=0;i<n;i++){var a=Math.PI*2*i/n-Math.PI/2;ctx.fillText(fOrder[i],cx+ld*Math.cos(a),cy+ld*Math.sin(a));}
+  var dvs=[];for(var i=0;i<n;i++)dvs.push(parseFloat(fScores[fOrder[i]].avg));
+  ctx.beginPath();
+  for(var i=0;i<n;i++){var dr=r*dvs[i]/5,a=Math.PI*2*i/n-Math.PI/2;if(i===0)ctx.moveTo(cx+dr*Math.cos(a),cy+dr*Math.sin(a));else ctx.lineTo(cx+dr*Math.cos(a),cy+dr*Math.sin(a));}
+  ctx.closePath();ctx.fillStyle=fc;ctx.fill();ctx.strokeStyle=lnc;ctx.lineWidth=2.2;ctx.stroke();
+  for(var i=0;i<n;i++){
+    var dr=r*dvs[i]/5,a=Math.PI*2*i/n-Math.PI/2;
+    ctx.beginPath();ctx.arc(cx+dr*Math.cos(a),cy+dr*Math.sin(a),4.5,0,Math.PI*2);
+    ctx.fillStyle="#fff";ctx.fill();ctx.strokeStyle=lnc;ctx.lineWidth=2;ctx.stroke();
+  }
+}
+</script>
+</body>
+</html>
